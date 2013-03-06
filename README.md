@@ -1,4 +1,6 @@
-Electrostatics
-==============
+p3TheoreticalElectrostatics
+===========================
 
-Package for solving the Laplace Equation in two or three dimensions and plotting the solutions using gnuplot.
+Repository for p3 theoretical group project on electrostatics
+
+Project structure to be discussed
