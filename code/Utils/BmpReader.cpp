@@ -9,8 +9,10 @@ Bmp_Reader::Bmp_Reader(std::string filename) {
         pixels = new RGBQUAD[ih.biWidth*ih.biHeight];
         int pad = ih.biWidth%4;
         char * dump[pad*ih.biHeight];
-        for (RGBQUAD * h = pixels;h!=pixels+ih.biWidth*ih.biHeight;h+=(ih.biWidth)) {
-        	for (RGBQUAD * i = h; i!=h+(ih.biWidth);++i) {
+//        for (RGBQUAD * h = pixels;h!=pixels+ih.biWidth*ih.biHeight;h+=(ih.biWidth)) {
+//        	for (RGBQUAD * i = h; i!=h+(ih.biWidth);++i) {
+        for (RGBQUAD *h = pixels;h!=pixels+ih.biWidth;++h) {
+        	for (RGBQUAD *i = h;;i+=ih.biWidth) {
         		if (ih.biBitCount==8) {
         			fread( &(*i).rgbReserved, 1, 1, file );
         		}
@@ -20,6 +22,7 @@ Bmp_Reader::Bmp_Reader(std::string filename) {
         		else if(ih.biBitCount==32) {
         			fread( &(*i),4, 1, file );
         		}
+        		if (i==h+(ih.biWidth-1)*ih.biHeight) break;//Oh god I feel dirty
         	}
         	fread(&dump,pad,1,file);
         }
