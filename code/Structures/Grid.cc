@@ -215,7 +215,7 @@ void Grid::set_gradients(grad_matrix grads) {
 
 //finds -ve gradient of each point in x and y direction. Equivalent to E_x and E_y. assumes increment =1.
 void Grid::efield() {
-	/*double dx1, dy1;
+	double dx1, dy1;
 	for (int x = 0; x < values.size(); x++) {
 		for (int y = 0; y < values[0].size(); y++) {
 			if ( x== values.size()-1 ) {gradients[x][y].e_size = gradients[x-1][y].e_size;}
@@ -223,17 +223,13 @@ void Grid::efield() {
 			else {
 			dx1 = values[x][y].value - values[x + 1][y].value;
 			dy1 = values[x][y].value - values[x][y + 1].value;
-			gradients[x][y].e_size = (x-25)*(sqrt(2.0)*sqrt(dx1*dx1+dy1*dy1));
+			gradients[x][y].e_size = sqrt(dx1*dx1+dy1*dy1);
 			}
 
 		}
-	}*/
-
-for (int x = 0; x < values.size(); x++) {
-		for (int y = 0; y < values[0].size(); y++) {
-			values[x][y].value = -values[x][y].value;
-		}
 	}
+
+
 }
 
 
