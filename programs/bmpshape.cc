@@ -21,26 +21,24 @@ int main() {
 
 	Bmp_Reader bmp("shape.bmp");
 	Grid first_grid = bmp.get_grid(conductor,Emax,Emin,10.);
-
+	cout << "got shape" << endl;
 
 	//first_grid.set_flow_careful(Emax, Emin);
 
-	first_grid.print_figure_to("figure.dat", 1);
-
 	Fast_Finite_Difference fd (first_grid);
-	fd.set_precision(0);
+	fd.set_precision(0.00001);
 	fd.set_maxit(10000);
     Grid sol = fd.get_solution();
+    cout << "done solving" << endl;
+    sol.set_figure_outline();
 	sol.print_all_to("results.dat");
 
-	cout << " done" << endl;
 
 
 	Gnuplot gp(sol);
 	sol.equip_values(N,n,m,Emax,1,1);
 	sol.print_contours_to("eq_lines.dat", N);
-
-    cout << "plotting" << endl;
+    cout << "done calling lines" << endl;
 
 	gp.add_command("set term postscript");
     gp.add_command("set ytics ('1000' 999)");
