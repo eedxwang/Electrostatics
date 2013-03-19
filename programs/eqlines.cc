@@ -23,14 +23,13 @@ int main() {
 	first_grid.set_flow(Emax, Emin);
 	first_grid.set_conductor(100 ,100,80,40,MS);
 
-	//first_grid.print_figure_to("figure.dat",1);
-
 	Fast_Finite_Difference fd (first_grid);
 	fd.set_precision(0.);
 	fd.set_maxit(10000);
     Grid sol = fd.get_solution();
-	sol.print_all_to("results.dat");
 
+    sol.set_figure_outline();
+	sol.print_all_to("results.dat");
 
 	Gnuplot gp(sol);
 	sol.equip_values(N,n,m,Emax,1,1);

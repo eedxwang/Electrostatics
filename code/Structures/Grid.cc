@@ -1945,6 +1945,28 @@ void Grid::print_contours_to(string filename, int n) {
 
 }
 
+double Grid::get_lowest_value() {
+    double lowest = 100000000;
+	for (int i = 0; i< values.size(); i++){
+		for (int j = 0; j< values[0].size(); j++){
+			if(lowest > values[i][j].value) lowest = values[i][j].value;
+		}
+	}
+	return lowest;
+}
+
+void Grid::set_figure_outline() {
+	get_surface_points_of_figure();
+    for (int y = 1; y < values[0].size()-1; y++){
+        for (int x = 1; x < values.size()-1; x++){
+            if (values[x][y].flag == 10000000) {
+                values[x][y].value = get_lowest_value();
+            }
+        }
+    }
+}
+
+
 // prints out the outline points (contour) of the figure. must specify the number of seperate figures ( usually just 1 )
 
 void Grid::print_figure_to(string filename, int number_of_figures) {
@@ -2001,7 +2023,6 @@ void Grid::print_figure_to(string filename, int number_of_figures) {
 
 	else
 		cout << "unable to open file" << endl;
-
 }
 
 // prints out the values of points in format:	 x	y	E
