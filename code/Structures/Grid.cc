@@ -959,6 +959,254 @@ void Grid::set_boundary_shape(int x1, int y1, int r, int z, double val,
 		}
 		break;
 	}
+    // Fractal: Julia set
+	case JS: {
+    		double currentRe, currentIm, previousRe, previousIm;
+		double constantRe;
+		double constantIm;
+		double R=r;
+		double N=z;
+		if (x1 - r < 0 || x1 + r > values.size() - 1 || y1 - r < 0
+				|| y1 + r > values[0].size() - 1)
+			cout << "Out of range." << endl;
+		else {
+			for (int xs = x1 - r; xs <= x1 + r; xs++) {
+				for (int ys = y1 - r; ys <= y1 + r; ys++) {
+					double xc= x1;
+					double xsd=xs;
+					constantRe = -0.5;
+					currentRe = (xsd - xc)/N ;
+					double yc= y1;
+					double ysd=ys;
+					constantIm = 0.5;
+					currentIm =(ysd - yc)/N;
+					double Iterations= 50;
+        				for(int i = 0; i < Iterations; i++){
+            					previousRe = currentRe;
+            					previousIm = currentIm;
+            					currentRe = previousRe * previousRe - previousIm * previousIm + constantRe;
+           					currentIm = 2 * previousRe * previousIm + constantIm;
+ 						if((currentRe * currentRe + currentIm * currentIm) > 4) break;
+					}
+					if((currentRe * currentRe + currentIm * currentIm) <= 4){
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}
+				}
+			}
+		}
+	break;
+	}
+
+    // Fractal: Mandelbrot set
+	case MS: {
+    		double currentRe, currentIm, previousRe, previousIm;
+		double constantRe;
+		double constantIm;
+		double N=z;
+		if (x1 - r < 0 || x1 + r > values.size() - 1 || y1 - r < 0
+				|| y1 + r > values[0].size() - 1)
+			cout << "Out of range." << endl;
+		else {
+			for (int xs = x1 - r; xs <= x1 + r; xs++) {
+				for (int ys = y1 - r; ys <= y1 + r; ys++) {
+					double xc= x1;
+					double xsd=xs;
+					//newRe = 1.5 * (xs - xc) ;
+					constantRe = (xsd - xc)/N ;
+					currentRe = 0;
+					double yc= y1;
+					double ysd=ys;
+       					//newIm = (ys -yc) ;
+					constantIm = (ysd - yc)/N ;
+					currentIm = 0;
+					double Iterations= 10;
+        				for(int i = 0; i < Iterations; i++){
+            					previousRe = currentRe;
+            					previousIm = currentIm;
+            					currentRe = previousRe * previousRe - previousIm * previousIm + constantRe;
+           					currentIm = 2 * previousRe * previousIm + constantIm;
+ 						if((currentRe * currentRe + currentIm * currentIm) > 4) break;
+					}
+					if((currentRe * currentRe + currentIm * currentIm) <= 4){
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}
+				}
+			}
+		}
+	break;
+	}
+
+	///Regular Convex Polygon
+	case RCP:{
+		double xc=x1;
+        	double yc=y1;
+        	double R=r;
+        	double N=z;
+       		double pi = 3.14159265;
+
+        	if (x1 - r < 0 || x1 + r > values.size() - 1 || y1 - r < 0
+		|| y1 + r > values[0].size() - 1)
+		cout << "Out of range." << endl;
+		else {
+			double phi= pi*(1-(2/N))/2;
+			for (int xs = x1 - r; xs <= x1 + r; xs++) {
+				for (int ys = y1 - r; ys <= y1 + r; ys++) {
+				double xsd= xs;
+				double ysd= ys;
+				double dis= sqrt((ysd-yc)*(ysd-yc)+(xsd-xc)*(xsd-xc));
+				if (xs==xc && ys==yc){//(0,0)
+					values[xs][ys].value = val;
+					values[xs][ys].boundary = true;
+				}
+				if (xs==xc && ys>yc){//(0,+y)
+					double actualtheta=pi/2;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}}
+				if (xs==xc && ys<yc){//(0,-y)
+					double actualtheta=3*pi/2;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}}
+				if (xs >xc && ys>=yc) {//Q1
+                        		double actualtheta= atan(double (ys-yc)/(xs-xc));
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}}
+				if (xs >xc && ys<yc) {//Q4
+                        		double actualtheta= atan(double (ys-yc)/(xs-xc)) + 2*pi;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}}
+				if (xs < xc && ys>=yc) {//Q2
+                        		double actualtheta= atan(double (ys-yc)/(xs-xc))+pi;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}}
+				if (xs < xc && ys<yc) {//Q3
+                        		double actualtheta= atan(double (ys-yc)/(xs-xc))+pi;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}}
+				}
+			}
+		}
+		break;
+	}
+	///Sinuisoidal Hoops
+	case SH: {
+		double xc=x1;
+		double yc=y1;
+		double T= z;
+		double R=r;
+		double pi=3.14159265;
+		if (x1 - (7*r/4) < 0 || x1 + (7*r/4) > values.size() - 1 || y1 - (7*r/4) < 0
+				|| y1 + (7*r/4) > values[0].size() - 1)
+			cout << "Out of range." << endl;
+		else {
+			for (int xs = x1 - 7*r/4; xs <= x1 + 7*r/4; xs++) {
+				for (int ys = y1 - 7*r/4; ys <= y1 + 7*r/4; ys++) {
+					double xsd= xs;
+					double ysd= ys;
+					double dis=sqrt((ysd-yc)*(ysd-yc)+(xsd-xc)*(xsd-xc));
+					if (xs==xc && ys==yc){
+						values[xs][ys].value = val;
+						values[xs][ys].boundary = true;
+					}
+					if (xs==xc && ys>yc){
+						double theta= pi/2;
+						double a=  R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].value = val;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if(xs==xc && yc<ys){
+						double theta= 3*pi/2;
+						double a=  R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].value = val;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if (xs>xc && ys>yc){//Q1
+						double theta= atan(double(ysd-yc)/(xsd-xc));
+						double a=  R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].value = val;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if(xs<xc && ys>yc){//Q2
+						double theta= atan(double(ysd-yc)/(xsd-xc))+pi;
+						double a=  R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].value = val;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if (xs<xc && ys<yc){//Q3
+						double theta= atan(double(ysd-yc)/(xsd-xc))+pi;
+						double a=  R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].value = val;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if (xs>xc && ys<yc){//Q4
+						double theta= atan(double(ysd-yc)/(xsd-xc))+2*pi;
+						double a=  R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].value = val;
+							values[xs][ys].boundary = true;
+						}
+					}
+				}
+			}
+		}
+		break;
+	}
+
+
+
 	case random_shape: {
 		srand(time(0));
 		int rand_shape = rand() % 9;
@@ -1251,6 +1499,255 @@ void Grid::set_boundary_shape(int x, int y, int r, int z,
 		}
 		break;
 	}
+
+	// Fractal: Julia sets
+	case JS: {
+        double currentRe, currentIm, previousRe, previousIm;
+		double constantRe;
+		double constantIm;
+		double R=r;
+		double N=z;
+		if (x - r < 0 || x + r > values.size() - 1 || y - r < 0
+				|| y + r > values[0].size() - 1)
+			cout << "Out of range." << endl;
+		else {
+			for (int xs = x - r; xs <= x + r; xs++) {
+				for (int ys = y - r; ys <= y + r; ys++) {
+					double xc= x;
+					double xsd=xs;
+					constantRe = -0.5 ;
+					currentRe = (xsd - xc)/N ;
+					double yc= y;
+					double ysd=ys;
+					constantIm = 0.5;
+					currentIm =(ysd - yc)/N;
+					double Iterations= 50;
+        				for(int i = 0; i < Iterations; i++){
+            					previousRe = currentRe;
+            					previousIm = currentIm;
+            					currentRe = previousRe * previousRe - previousIm * previousIm + constantRe;
+           					currentIm = 2 * previousRe * previousIm + constantIm;
+ 						if((currentRe * currentRe + currentIm * currentIm) > 4) break;
+					}
+					if((currentRe * currentRe + currentIm * currentIm) <= 4){
+						values[xs][ys].flag=1;
+						values[xs][ys].boundary = true;
+					}
+				}
+			}
+		}
+	break;
+	}
+
+    // Fractal: Mandelbrot set
+	case MS: {
+    		double currentRe, currentIm, previousRe, previousIm;
+		double constantRe;
+		double constantIm;
+		double N=z;
+		if (x - r < 0 || x + r > values.size() - 1 || y - r < 0
+				|| y + r > values[0].size() - 1)
+			cout << "Out of range." << endl;
+		else {
+			for (int xs = x - r; xs <= x + r; xs++) {
+				for (int ys = y - r; ys <= y + r; ys++) {
+					double xc= x;
+					double xsd=xs;
+					//newRe = 1.5 * (xs - xc) ;
+					constantRe = (xsd - xc)/N ;
+					currentRe = 0;
+					double yc= y;
+					double ysd=ys;
+       					//newIm = (ys -yc) ;
+					constantIm = (ysd - yc)/N ;
+					currentIm = 0;
+					double Iterations= 10;
+        				for(int i = 0; i < Iterations; i++){
+            					previousRe = currentRe;
+            					previousIm = currentIm;
+            					currentRe = previousRe * previousRe - previousIm * previousIm + constantRe;
+           					currentIm = 2 * previousRe * previousIm + constantIm;
+ 						if((currentRe * currentRe + currentIm * currentIm) > 4) break;
+					}
+					if((currentRe * currentRe + currentIm * currentIm) <= 4){
+						values[xs][ys].flag=1;
+						values[xs][ys].boundary = true;
+					}
+				}
+			}
+		}
+	break;
+	}
+	///Regular Convex Polygon
+	case RCP:{
+		double xc=x;
+        	double yc=y;
+        	double R=r;
+        	double N=z;
+       		double pi = 3.14159265;
+
+        	if (x - r < 0 || x + r > values.size() - 1 || y - r < 0
+		|| y + r > values[0].size() - 1)
+		cout << "Out of range." << endl;
+		else {
+			double phi= pi*(1-(2/N))/2;
+			for (int xs = x - r; xs <= x + r; xs++) {
+				for (int ys = y - r; ys <= y + r; ys++) {
+				double xsd= xs;
+				double ysd= ys;
+				double dis= sqrt((ysd-yc)*(ysd-yc)+(xsd-xc)*(xsd-xc));
+				if (xs==xc && ys==yc){//(0,0)
+					values[xs][ys].boundary = true;
+					values[xs][ys].flag = 1;
+				}
+				if (xs==xc && ys>yc){//(0,+y)
+					double actualtheta=pi/2;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].boundary = true;
+						values[xs][ys].flag = 1;
+					}}
+				if (xs==xc && ys<yc){//(0,-y)
+					double actualtheta=3*pi/2;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].boundary = true;
+						values[xs][ys].flag = 1;
+					}}
+				if (xs >xc && ys>=yc) {//Q1
+                        		double actualtheta= atan(double (ys-yc)/(xs-xc));
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].boundary = true;
+						values[xs][ys].flag = 1;
+					}}
+				if (xs >xc && ys<yc) {//Q4
+                        		double actualtheta= atan(double (ys-yc)/(xs-xc)) + 2*pi;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].boundary = true;
+						values[xs][ys].flag = 1;
+					}}
+				if (xs < xc && ys>=yc) {//Q2
+                        		double actualtheta= atan(double (ys-yc)/(xs-xc))+pi;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].boundary = true;
+						values[xs][ys].flag = 1;
+					}}
+				if (xs < xc && ys<yc) {//Q3
+                        		double actualtheta= atan(double (ys-yc)/(xs-xc))+pi;
+					double correctedtheta=actualtheta;
+					while (correctedtheta >= 2*pi/N){
+						correctedtheta=correctedtheta-2*pi/N;
+					}
+					double a=R*sin(phi)/sin(double (pi-correctedtheta-phi));
+					if (dis < a) {
+						values[xs][ys].boundary = true;
+						values[xs][ys].flag = 1;
+					}}
+				}
+			}
+		}
+		break;
+	}
+
+	///Sinuisoidal Hoops
+	case SH: {
+		double xc=x;
+		double yc=y;
+		double T= z;
+		double R=r;
+		double pi=3.14159265;
+		if (x - (7*r/4) < 0 || x + (7*r/4) > values.size() - 1 || y - (7*r/4) < 0
+				|| y + (7*r/4) > values[0].size() - 1)
+			cout << "Out of range." << endl;
+		else {
+			for (int xs = x - 7*r/4; xs <= x + 7*r/4; xs++) {
+				for (int ys = y - 7*r/4; ys <= y + 7*r/4; ys++) {
+					double xsd= xs;
+					double ysd= ys;
+					double dis=sqrt((ysd-yc)*(ysd-yc)+(xsd-xc)*(xsd-xc));
+					if (xs==xc && ys==yc){
+						values[xs][ys].flag=1;
+						values[xs][ys].boundary = true;
+					}
+					if (xs==xc && ys>yc){
+						double theta= pi/2;
+						double a= R+R*sin(theta*T)/2+R*sin(theta*T*3)/4 ;
+						if (dis < a) {
+							values[xs][ys].flag=1;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if(xs==xc && yc<ys){
+						double theta= 3*pi/2;
+						double a= R+R*sin(theta*T)/2+R*sin(theta*T*3)/4 ;
+						if (dis < a) {
+							values[xs][ys].flag=1;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if (xs>xc && ys>yc){//Q1
+						double theta= atan(double(ysd-yc)/(xsd-xc));
+						double a= R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].flag=1;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if(xs<xc && ys>yc){//Q2
+
+						double theta= atan(double(ysd-yc)/(xsd-xc))+pi;
+						double a= R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].flag=1;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if (xs<xc && ys<yc){//Q3
+						double theta= atan(double(ysd-yc)/(xsd-xc))+pi;
+						double a=  R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].flag=1;
+							values[xs][ys].boundary = true;
+						}
+					}
+					if (xs>xc && ys<yc){//Q4
+						double theta= atan(double(ysd-yc)/(xs-xc))+2*pi;
+						double a=  R+R*sin(theta*T)/2+R*sin(theta*T*3)/4;
+						if (dis < a) {
+							values[xs][ys].flag=1;
+							values[xs][ys].boundary = true;
+						}
+					}
+				}
+			}
+		}
+		break;
+	}
+
+
 	case random_shape: {
 		srand(time(0));
 		int rand_shape = rand() % 9;

@@ -12,7 +12,8 @@
 #include "Coordinate.h"
 
 enum Shape {circle, semicircle_north, semicircle_south, semicircle_east,
-	semicircle_west, rectangle, triangle, ellipse, star, random_shape,bmp};
+	semicircle_west, rectangle, triangle, ellipse, star, random_shape,
+	SH, RCP, MS, JS};
 
 enum Boundary {boundary,accessible,conductor};
 
