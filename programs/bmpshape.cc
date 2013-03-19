@@ -47,7 +47,7 @@ int main() {
 	gp.add_command("set palette defined");
     gp.add_command("unset key");
     //gp.add_plot();
-	gp.add_command("plot 'results.dat' with image, 'eq_lines.dat' with lines ls -1, 'figure.dat' with lines ls -1"); // white = ls -3; black = ls -1; red = ls 1; green = 2; blue = ls 3; violet = ls 4;
+	gp.add_command("plot 'results.dat' with image, 'eq_lines.dat' with lines ls -1"); //, 'figure.dat' with lines ls -1"); // white = ls -3; black = ls -1; red = ls 1; green = 2; blue = ls 3; violet = ls 4;
 	gp.sendString();
 
 	return 0;

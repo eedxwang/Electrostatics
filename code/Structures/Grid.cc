@@ -691,7 +691,13 @@ void Grid::set_flags_to_zero() {
 void Grid::get_surface_points_of_figure() {
 		for (int xs = 1; xs < values.size()-1; xs++) {
 			for (int ys = 1; ys < values[0].size()-1; ys++) {
-				if ((values[xs][ys].boundary == 1) && !( (values[xs-1][ys].boundary == 0 && values[xs][ys-1].boundary == 0 && values[xs+1][ys].boundary == 0 && values[xs][ys+1].boundary == 0 )) && !((values[xs-1][ys].boundary == 1 && values[xs][ys-1].boundary == 1 && values[xs+1][ys].boundary == 1 && values[xs][ys+1].boundary == 1 ) ) ) { values[xs][ys].flag = 10000000;}
+				if ((values[xs][ys].boundary == 1) && (!values[xs-1][ys].boundary || !values[xs+1][ys].boundary || !values[xs][ys-1].boundary || !values[xs][ys+1].boundary)) {
+				   values[xs][ys].flag = 10000000;
+                   if(!values[xs-1][ys].boundary) values[xs-1][ys].flag = 10000000;
+                   if(!values[xs+1][ys].boundary) values[xs+1][ys].flag = 10000000;
+                   if(!values[xs][ys-1].boundary) values[xs][ys-1].flag = 10000000;
+                   if(!values[xs][ys+1].boundary) values[xs][ys+1].flag = 10000000;
+                }
 			}
 		}
 }
