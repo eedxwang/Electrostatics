@@ -1912,7 +1912,6 @@ void Grid::get_equipotential_lines(int N) {
     int x_size = values.size() - 1;
     int y_size = values[0].size() - 1;
     for(int i = 0; i < N; i++){
-        cout << "n of line:" << i << endl;
         int x_1 = i*round_own((double) x_size/(N));
         int inix = x_1;
         int y_1 = 0;
