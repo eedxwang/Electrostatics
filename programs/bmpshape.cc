@@ -33,8 +33,11 @@ int main(int argc,char * argv[]) {
     cout << "Done solving!" << endl;
 
     cout << "Plotting..." << endl;
+    sol.efield();
     sol.set_figure_outline();
 	sol.set_equipotential_lines(N,1,1);
+	sol.print_all_to("results.dat");
+	sol.print_efield_to("efield.dat", 10);
 
 	Gnuplot gp(sol);
 	gp.add_command("set term postscript");
@@ -42,9 +45,12 @@ int main(int argc,char * argv[]) {
 	gp.add_command("set palette defined");
     gp.add_command("unset key");
     //gp.add_plot();
-	gp.add_plot();
+	gp.add_command("plot 'results.dat' matrix with image, 'efield.dat' using 1:2:3:4 with vectors head filled lt 2");
 	//, 'figure.dat' with lines ls -1"); // white = ls -3; black = ls -1; red = ls 1; green = 2; blue = ls 3; violet = ls 4;
 	gp.sendString();
+
+	remove("results.dat");
+	remove("efield.dat");
 
     cout << "Done plotting!" << endl;
 

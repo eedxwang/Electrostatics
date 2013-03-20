@@ -91,6 +91,7 @@ public:
 	void efield();
 	double get_average_value(matrix &grid);
     double get_average_value_safe(matrix &grid);
+    void print_electric_field(std::string filename, int n);
 
 private:
 	//private members

@@ -1937,8 +1937,8 @@ void Grid::print_matrix_to(string filename) {
 	ofstream outdata;
 	outdata.open(filename.c_str());
 	if (outdata.is_open()) {
-		for (int y = 0; y < values.size(); y++) {
-			for (int x = 0; x < values[0].size(); x++) {
+		for (int x = 0; x < values.size(); x++) {
+			for (int y = 0; y < values[0].size(); y++) {
 
 				outdata << values[x][y].value << "\t";
 			}
@@ -2034,7 +2034,7 @@ double Grid::get_lowest_value() {
 
 
 void Grid::set_figure_outline() {
-    double low_val = get_lowest_value();
+    double low_val = get_highest_value();
 	get_surface_points_of_figure();
     for (int y = 1; y < values[0].size()-1; y++){
         for (int x = 1; x < values.size()-1; x++){
@@ -2123,6 +2123,21 @@ void Grid::print_points_to(string filename) {
 		cout << "unable to open file" << endl;
 
 }
+
+void Grid::print_electric_field(string filename, int n) {
+    ofstream outdata;
+	outdata.open(filename.c_str());
+	if (outdata.is_open()) {
+        for (int x = 1; x < values.size()-1; x++) {
+            for (int y = 1; y < values[0].size(); y++) {
+                if ( x%n == 0 && y%n == 0 && !values[x][y].boundary )
+                    {outdata << x << "\t" << y << "\t" << gradients[x][y].dx << "\t" << gradients[x][y].dy << "\t"  << endl;}
+            }
+        }
+        outdata.close();
+	}
+}
+
 void Grid::print_efield_to(string filename, int n) {
 	ofstream outdata;
 	outdata.open(filename.c_str());
@@ -2141,7 +2156,6 @@ void Grid::print_efield_to(string filename, int n) {
 			outdata << endl;
 		}
 		outdata.close();
-
 	}
 
 	else
