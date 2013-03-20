@@ -225,6 +225,8 @@ void Grid::efield() {
 			dx1 = values[x][y].value - values[x + 1][y].value;
 			dy1 = values[x][y].value - values[x][y + 1].value;
 			gradients[x][y].e_size = sqrt(dx1*dx1+dy1*dy1);
+			gradients[x][y].dx = dx1;
+			gradients[x][y].dy = dy1;
 			}
 
 		}
@@ -1940,7 +1942,7 @@ void Grid::print_matrix_to(string filename) {
 		for (int x = 0; x < values.size(); x++) {
 			for (int y = 0; y < values[0].size(); y++) {
 
-				outdata << values[x][y].value << "\t";
+				outdata << values[y][x].value << "\t";
 			}
 			outdata << "\n";
 		}
@@ -2131,7 +2133,7 @@ void Grid::print_electric_field(string filename, int n) {
         for (int x = 1; x < values.size()-1; x++) {
             for (int y = 1; y < values[0].size(); y++) {
                 if ( x%n == 0 && y%n == 0 && !values[x][y].boundary )
-                    {outdata << x << "\t" << y << "\t" << gradients[x][y].dx << "\t" << gradients[x][y].dy << "\t"  << endl;}
+                    {outdata << x << "\t" << y << "\t" << n * gradients[x][y].dx << "\t" << n * gradients[x][y].dy << "\t"  << endl;}
             }
         }
         outdata.close();

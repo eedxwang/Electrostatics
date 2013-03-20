@@ -36,8 +36,8 @@ int main(int argc,char * argv[]) {
     sol.efield();
     sol.set_figure_outline();
 	sol.set_equipotential_lines(N,1,1);
-	sol.print_all_to("results.dat");
-	sol.print_efield_to("efield.dat", 10);
+	sol.print_matrix_to("results.dat");
+	sol.print_electric_field("efield.dat", 20);
 
 	Gnuplot gp(sol);
 	gp.add_command("set term postscript");
@@ -49,8 +49,8 @@ int main(int argc,char * argv[]) {
 	//, 'figure.dat' with lines ls -1"); // white = ls -3; black = ls -1; red = ls 1; green = 2; blue = ls 3; violet = ls 4;
 	gp.sendString();
 
-	remove("results.dat");
-	remove("efield.dat");
+	//remove("results.dat");
+	//remove("efield.dat");
 
     cout << "Done plotting!" << endl;
 
