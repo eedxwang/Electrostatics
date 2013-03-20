@@ -1895,6 +1895,45 @@ void Grid::print_all_to(string filename) {
 
 }
 
+Coordinate Grid::get_next_point(int x, int y, double val, int n) {
+    double diff = 10000;
+    int x_n = 0;
+    int y_n = 0;
+    if(x != 0){if(abs(values[x-1][y].value - val) < diff && values[x-1][y].flag != n) {x_n = x-1; y_n = y; diff = abs(values[x-1][y].value - val);}}
+    if(x != values.size() -1){if(abs(values[x+1][y].value - val) < diff && values[x+1][y].flag != n) {x_n = x+1; y_n = y; diff = abs(values[x+1][y].value - val);}}
+    if(y != 0){if(abs(values[x][y-1].value - val) < diff && values[x][y-1].flag != n) {x_n = x; y_n = y-1; diff = abs(values[x][y-1].value - val);}}
+    if(y != values.size() -1){if(abs(values[x][y+1].value - val) < diff && values[x][y+1].flag != n) {x_n = x; y_n = y+1; diff = abs(values[x][y+1].value - val);}}
+    Coordinate new_co;
+    new_co.set_xy(x_n,y_n);
+    return new_co;
+}
+
+void Grid::get_equipotential_lines(int N) {
+    int x_size = values.size() - 1;
+    int y_size = values[0].size() - 1;
+    for(int i = 0; i < N; i++){
+        cout << "n of line:" << i << endl;
+        int x_1 = i*round_own((double) x_size/(N));
+        int inix = x_1;
+        int y_1 = 0;
+        bool check = true;
+        double in_val = values[x_1][y_1].value;
+        for(;;) {
+            values[x_1][y_1].flag = i;
+            Coordinate next = get_next_point(x_1, y_1, in_val, i);
+            x_1 = next.get_x();
+            y_1 = next.get_y();
+            if(y_1 == y_size && check == true)break;
+            if(y_1 == 0 && check == false)break;
+            if(values[x_1][y_1].boundary == true && (x_1 != 0 || x_1 != x_size || y_1 != 0 || y_1 != y_size)) {
+                if (check == true){x_1 = inix; y_1 = y_size; check = false;}
+                else break;
+            }
+
+        }
+    }
+}
+
 void Grid::print_matrix_to(string filename) {
 	ofstream outdata;
 	outdata.open(filename.c_str());
@@ -1931,7 +1970,7 @@ void Grid::print_points() {
 // prints out the points for eq.p lines. n - the number of eq.pot. lines
 
 void Grid::set_equipotential_lines(int n, int a, int b) {
-    equip_values(n,a,b);
+    get_equipotential_lines(n);
     double low_val = get_lowest_value();
     for (int i=1; i <= n; ++i) {
         for (int y = 0; y < values[0].size(); y++) {
