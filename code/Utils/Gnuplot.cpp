@@ -2,7 +2,6 @@
 
 Gnuplot::Gnuplot(Grid entry) {
 	matrix vals = entry.get_values();
-	fp = popen(GNUPLOT, "w");
 	str = strStream.str();
 	for (unsigned int y = 0; y < vals[0].size(); y++) {
 		for (unsigned int x = 0; x < vals.size(); x++) {
@@ -25,12 +24,13 @@ Gnuplot::Gnuplot(Grid entry) {
 }
 
 Gnuplot::~Gnuplot() {
-	pclose(fp);
 }
 
 void Gnuplot::sendString() {
+	fp = popen(GNUPLOT, "w");
 	str = strStream.str();
-	fprintf(fp,"%s",str.c_str());
+	fputs(str.c_str(),fp);
+	pclose(fp);
 }
 
 void Gnuplot::add_command(std::string command) {
