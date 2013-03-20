@@ -35,10 +35,10 @@ int main(int argc,char * argv[]) {
     cout << "Plotting..." << endl;
     int size = sol.get_xmax();
     sol.efield();
+    sol.set_equipotential_lines(N,1,1);
     sol.set_figure_outline();
-	sol.set_equipotential_lines(N,1,1);
-	sol.print_matrix_to("results.dat");
-	sol.print_electric_field("efield.dat", size/15);
+  	sol.print_matrix_to("results.dat");
+	sol.print_electric_field("efield.dat", size/30);
 
 	Gnuplot gp(sol);
 	gp.add_command("set term postscript");

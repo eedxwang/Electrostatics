@@ -1897,14 +1897,21 @@ void Grid::print_all_to(string filename) {
 
 }
 
-Coordinate Grid::get_next_point(int x, int y, double val, int n) {
+Coordinate Grid::get_next_point(int x, int y, double val, int n, double& error) {
     double diff = 10000;
     int x_n = 0;
     int y_n = 0;
     if(x != 0){if(abs(values[x-1][y].value - val) < diff && values[x-1][y].flag != n) {x_n = x-1; y_n = y; diff = abs(values[x-1][y].value - val);}}
-    if(x != values.size() -1){if(abs(values[x+1][y].value - val) < diff && values[x+1][y].flag != n) {x_n = x+1; y_n = y; diff = abs(values[x+1][y].value - val);}}
+    if(x != (values.size() -1)){if(abs(values[x+1][y].value - val) < diff && values[x+1][y].flag != n) {x_n = x+1; y_n = y; diff = abs(values[x+1][y].value - val);}}
     if(y != 0){if(abs(values[x][y-1].value - val) < diff && values[x][y-1].flag != n) {x_n = x; y_n = y-1; diff = abs(values[x][y-1].value - val);}}
-    if(y != values.size() -1){if(abs(values[x][y+1].value - val) < diff && values[x][y+1].flag != n) {x_n = x; y_n = y+1; diff = abs(values[x][y+1].value - val);}}
+    if(y != (values[0].size() -1)){if(abs(values[x][y+1].value - val) < diff && values[x][y+1].flag != n) {x_n = x; y_n = y+1; diff = abs(values[x][y+1].value - val);}}
+    if(x != 0 && y != 0){if(abs(values[x-1][y-1].value - val) < diff && values[x-1][y-1].flag != n) {x_n = x-1; y_n = y-1; diff = abs(values[x-1][y-1].value - val);}}
+    if(x != (values.size() -1) && y != 0){if(abs(values[x+1][y-1].value - val) < diff && values[x+1][y-1].flag != n) {x_n = x+1; y_n = y-1; diff = abs(values[x+1][y-1].value - val);}}
+    if(x != 0 && y != (values[0].size() -1)){if(abs(values[x-1][y+1].value - val) < diff && values[x-1][y+1].flag != n) {x_n = x-1; y_n = y+1; diff = abs(values[x-1][y+1].value - val);}}
+    if(x != (values.size() -1) && y != (values[0].size() -1)){if(abs(values[x+1][y+1].value - val) < diff && values[x+1][y+1].flag != n) {x_n = x+1; y_n = y+1; diff = abs(values[x+1][y+1].value - val);}}
+
+    error = diff;
+
     Coordinate new_co;
     new_co.set_xy(x_n,y_n);
     return new_co;
@@ -1917,11 +1924,16 @@ void Grid::get_equipotential_lines(int N) {
         int x_1 = i*round_own((double) x_size/(N));
         int inix = x_1;
         int y_1 = 0;
+        double err = 0;
         bool check = true;
         double in_val = values[x_1][y_1].value;
         for(;;) {
             values[x_1][y_1].flag = i;
-            Coordinate next = get_next_point(x_1, y_1, in_val, i);
+            Coordinate next = get_next_point(x_1, y_1, in_val, i, err);
+            if(err > 3){
+                if (check == true){x_1 = inix; y_1 = y_size; check = false; continue;}
+                else break;
+            }
             x_1 = next.get_x();
             y_1 = next.get_y();
             if(y_1 == y_size && check == true)break;
@@ -1930,7 +1942,6 @@ void Grid::get_equipotential_lines(int N) {
                 if (check == true){x_1 = inix; y_1 = y_size; check = false;}
                 else break;
             }
-
         }
     }
 }
