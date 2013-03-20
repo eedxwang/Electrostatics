@@ -106,7 +106,7 @@ private:
     double get_highest_value();
     int number_of_lines;
     void get_equipotential_lines(int N);
-    Coordinate get_next_point(int x, int y, double val, int n);
+    Coordinate get_next_point(int x, int y, double val, int n, double& error);
 
 };
 

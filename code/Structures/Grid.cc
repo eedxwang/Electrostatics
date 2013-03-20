@@ -1930,7 +1930,7 @@ void Grid::get_equipotential_lines(int N) {
         for(;;) {
             values[x_1][y_1].flag = i;
             Coordinate next = get_next_point(x_1, y_1, in_val, i, err);
-            if(err > 3){
+            if(err > 1){
                 if (check == true){x_1 = inix; y_1 = y_size; check = false; continue;}
                 else break;
             }
