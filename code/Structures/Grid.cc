@@ -437,7 +437,7 @@ void Grid::equip_values(int n, int line_width,
 				}
 			}
 
-			if (yi >= ymax || xi < 0 || xi > xmax) {
+			if (yi >= ymax || xi <= 0 || xi >= xmax) {
 				break;
 			}
 

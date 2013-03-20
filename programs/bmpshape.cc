@@ -38,8 +38,6 @@ int main(int argc,char * argv[]) {
 
 	Gnuplot gp(sol);
 	gp.add_command("set term postscript");
-    gp.add_command("set ytics ('500' 499)");
-    gp.add_command("set xtics ('500' 499)");
 	gp.add_command("set output 'shape.ps'");
 	gp.add_command("set palette defined");
     gp.add_command("unset key");
