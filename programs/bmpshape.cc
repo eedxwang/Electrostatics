@@ -40,21 +40,17 @@ int main() {
 
     cout << "Plotting..." << endl;
     sol.set_figure_outline();
-	sol.print_all_to("results.dat");
-
+	sol.set_equipotential_lines(N,1,1);
 
 	Gnuplot gp(sol);
-	sol.equip_values(N,1,1);
-	sol.print_contours_to("eq_lines.dat");
-
 	gp.add_command("set term postscript");
-    gp.add_command("set ytics ('1000' 999)");
-    gp.add_command("set xtics ('1000' 999)");
+    gp.add_command("set ytics ('500' 499)");
+    gp.add_command("set xtics ('500' 499)");
 	gp.add_command("set output 'shape.ps'");
 	gp.add_command("set palette defined");
     gp.add_command("unset key");
     //gp.add_plot();
-	gp.add_command("plot 'results.dat' with image, 'eq_lines.dat' with lines ls -1");
+	gp.add_plot();
 	//, 'figure.dat' with lines ls -1"); // white = ls -3; black = ls -1; red = ls 1; green = 2; blue = ls 3; violet = ls 4;
 	gp.sendString();
 
