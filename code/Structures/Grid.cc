@@ -1901,14 +1901,14 @@ Coordinate Grid::get_next_point(int x, int y, double val, int n, double& error) 
     double diff = 10000;
     int x_n = 0;
     int y_n = 0;
-    if(x != 0){if(abs(values[x-1][y].value - val) < diff && values[x-1][y].flag != n) {x_n = x-1; y_n = y; diff = abs(values[x-1][y].value - val);}}
-    if(x != (values.size() -1)){if(abs(values[x+1][y].value - val) < diff && values[x+1][y].flag != n) {x_n = x+1; y_n = y; diff = abs(values[x+1][y].value - val);}}
-    if(y != 0){if(abs(values[x][y-1].value - val) < diff && values[x][y-1].flag != n) {x_n = x; y_n = y-1; diff = abs(values[x][y-1].value - val);}}
-    if(y != (values[0].size() -1)){if(abs(values[x][y+1].value - val) < diff && values[x][y+1].flag != n) {x_n = x; y_n = y+1; diff = abs(values[x][y+1].value - val);}}
-    if(x != 0 && y != 0){if(abs(values[x-1][y-1].value - val) < diff && values[x-1][y-1].flag != n) {x_n = x-1; y_n = y-1; diff = abs(values[x-1][y-1].value - val);}}
-    if(x != (values.size() -1) && y != 0){if(abs(values[x+1][y-1].value - val) < diff && values[x+1][y-1].flag != n) {x_n = x+1; y_n = y-1; diff = abs(values[x+1][y-1].value - val);}}
-    if(x != 0 && y != (values[0].size() -1)){if(abs(values[x-1][y+1].value - val) < diff && values[x-1][y+1].flag != n) {x_n = x-1; y_n = y+1; diff = abs(values[x-1][y+1].value - val);}}
-    if(x != (values.size() -1) && y != (values[0].size() -1)){if(abs(values[x+1][y+1].value - val) < diff && values[x+1][y+1].flag != n) {x_n = x+1; y_n = y+1; diff = abs(values[x+1][y+1].value - val);}}
+    if(x != 0){if(abs(values[x-1][y].value - val) < diff && values[x-1][y].flag != n && values[x-1][y].flag != -5) {x_n = x-1; y_n = y; diff = abs(values[x-1][y].value - val);}}
+    if(x != (values.size() -1)){if(abs(values[x+1][y].value - val) < diff && values[x+1][y].flag != n && values[x+1][y].flag != -5) {x_n = x+1; y_n = y; diff = abs(values[x+1][y].value - val);}}
+    if(y != 0){if(abs(values[x][y-1].value - val) < diff && values[x][y-1].flag != n && values[x][y-1].flag != -5) {x_n = x; y_n = y-1; diff = abs(values[x][y-1].value - val);}}
+    if(y != (values[0].size() -1)){if(abs(values[x][y+1].value - val) < diff && values[x][y+1].flag != n && values[x][y+1].flag != -5) {x_n = x; y_n = y+1; diff = abs(values[x][y+1].value - val);}}
+    if(x != 0 && y != 0){if(abs(values[x-1][y-1].value - val) < diff && values[x-1][y-1].flag != n && values[x-1][y-1].flag != -5) {x_n = x-1; y_n = y-1; diff = abs(values[x-1][y-1].value - val);}}
+    if(x != (values.size() -1) && y != 0){if(abs(values[x+1][y-1].value - val) < diff && values[x+1][y-1].flag != n && values[x+1][y-1].flag != -5) {x_n = x+1; y_n = y-1; diff = abs(values[x+1][y-1].value - val);}}
+    if(x != 0 && y != (values[0].size() -1)){if(abs(values[x-1][y+1].value - val) < diff && values[x-1][y+1].flag != n && values[x-1][y+1].flag != -5) {x_n = x-1; y_n = y+1; diff = abs(values[x-1][y+1].value - val);}}
+    if(x != (values.size() -1) && y != (values[0].size() -1)){if(abs(values[x+1][y+1].value - val) < diff && values[x+1][y+1].flag != n && values[x+1][y+1].flag != -5) {x_n = x+1; y_n = y+1; diff = abs(values[x+1][y+1].value - val);}}
 
     error = diff;
 
@@ -1920,6 +1920,7 @@ Coordinate Grid::get_next_point(int x, int y, double val, int n, double& error) 
 void Grid::get_equipotential_lines(int N) {
     int x_size = values.size() - 1;
     int y_size = values[0].size() - 1;
+    int x_2, y_2, x_3, y_3, tempx, tempy = 0;
     for(int i = 0; i < N; i++){
         int x_1 = i*round_own((double) x_size/(N));
         int inix = x_1;
@@ -1934,8 +1935,24 @@ void Grid::get_equipotential_lines(int N) {
                 if (check == true){x_1 = inix; y_1 = y_size; check = false; continue;}
                 else break;
             }
+            tempx = x_3;
+            tempy = y_3;
+            x_3 = x_2;
+            y_3 = y_2;
+            x_2 = x_1;
+            y_2 = y_1;
             x_1 = next.get_x();
             y_1 = next.get_y();
+            if( ((x_1-x_3)*(x_1-x_3) + (y_1-y_3)*(y_1-y_3)) < 1.9 ) {
+                values[x_1][y_1].flag = -5;
+                x_1 = x_2;
+                y_1 = y_2;
+                x_2 = x_3;
+                y_2 = y_3;
+                x_3 = tempx;
+                y_3 = tempy;
+                continue;
+            }
             if(y_1 == y_size && check == true)break;
             if(y_1 == 0 && check == false)break;
             if(values[x_1][y_1].boundary == true && (x_1 != 0 || x_1 != x_size || y_1 != 0 || y_1 != y_size)) {
