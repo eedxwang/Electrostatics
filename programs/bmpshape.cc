@@ -41,8 +41,9 @@ int main(int argc,char * argv[]) {
 	sol.print_electric_field("efield.dat", size/30);
 
 	Gnuplot gp(sol);
+	std::string filename = file.substr(0,file.size()-4);
 	gp.add_command("set term postscript");
-	gp.add_command("set output 'shape.ps'");
+	gp.add_command("set output '"+filename+".ps'");
 	gp.add_command("set palette defined");
     gp.add_command("unset key");
     //gp.add_plot();
