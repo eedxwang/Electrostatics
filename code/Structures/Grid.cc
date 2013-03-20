@@ -341,9 +341,11 @@ void Grid::equip_values(int n, int xmax, int ymax, double Emax, int line_width, 
 
 
 
-void Grid::equip_values(int n, int xmax, int ymax, double Emax, int line_width,
+void Grid::equip_values(int n, int line_width,
 		int menu) {
-
+    int xmax = values.size() - 1;
+    int ymax = values[0].size() - 1;
+    double Emax = get_highest_value();
 	set_flags_to_zero();
 	double dx = (double) xmax / (n - 1);
 	int flag_numb = 1;
@@ -1951,6 +1953,16 @@ void Grid::print_contours_to(string filename, int n) {
 
 }
 
+double Grid::get_highest_value() {
+    double lowest = -100000000;
+	for (int i = 0; i< values.size(); i++){
+		for (int j = 0; j< values[0].size(); j++){
+			if(lowest < values[i][j].value) lowest = values[i][j].value;
+		}
+	}
+	return lowest;
+}
+
 double Grid::get_lowest_value() {
     double lowest = 100000000;
 	for (int i = 0; i< values.size(); i++){
@@ -1961,12 +1973,14 @@ double Grid::get_lowest_value() {
 	return lowest;
 }
 
+
 void Grid::set_figure_outline() {
+    double low_val = get_lowest_value();
 	get_surface_points_of_figure();
     for (int y = 1; y < values[0].size()-1; y++){
         for (int x = 1; x < values.size()-1; x++){
             if (values[x][y].flag == 10000000) {
-                values[x][y].value = get_lowest_value();
+                values[x][y].value = low_val;
             }
         }
     }

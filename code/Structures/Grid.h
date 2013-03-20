@@ -53,7 +53,7 @@ public:
 	void set_coordinates(coordinate_matrix coords);
 	void set_values(matrix vals);
 	void set_gradients(grad_matrix grads);
-	void equip_values(int n, int xmax, int ymax, double Emax, int line_width, int menu);
+	void equip_values(int n, int line_width, int menu);
 	void get_efield(int n, int xmax, int ymax, double Emax);
 	void set_flags_to_zero();
 	void set_figure_outline();
@@ -101,6 +101,8 @@ private:
 	void check_and_mark_cells (int &xa, int &ya, int deltax, int deltay, Value &prev_prev2, Value &prev2, Value &current2, int flag_numb2);
 	bool compare(Value nn, Value mm);
 	double get_lowest_value();
+    double get_highest_value();
+
 
 };
 
