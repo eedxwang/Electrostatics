@@ -10,7 +10,7 @@
 
 using namespace std;
 
-int main() {
+int main(int argc,char * argv[]) {
 
 	int N = 10 ;     // number of eq.p. lines
 	int n = 499;
@@ -19,8 +19,11 @@ int main() {
 
 	double Emax=50;
 	double Emin=-50;
-
-	Bmp_Reader bmp("shape.bmp");
+	std::string file = "shape.bmp";
+	if (argc == 2) {
+		file = argv[1];
+	}
+	Bmp_Reader bmp(file);
 	Grid first_grid = bmp.get_grid(conductor,Emax,Emin,10.);
 	cout << "Shape parsed." << endl;
 
