@@ -54,6 +54,7 @@ public:
 	void set_values(matrix vals);
 	void set_gradients(grad_matrix grads);
 	void equip_values(int n, int line_width, int menu);
+	void set_equipotential_lines(int n, int a, int b);
 	void get_efield(int n, int xmax, int ymax, double Emax);
 	void set_flags_to_zero();
 	void set_figure_outline();
@@ -103,7 +104,6 @@ private:
 	double get_lowest_value();
     double get_highest_value();
     int number_of_lines;
-
 
 };
 

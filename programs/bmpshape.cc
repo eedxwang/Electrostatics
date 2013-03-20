@@ -13,32 +13,23 @@ using namespace std;
 int main(int argc,char * argv[]) {
 
 	int N = 10 ;     // number of eq.p. lines
-	int n = 499;
-	int m = 499;
-
-
 	double Emax=50;
 	double Emin=-50;
+
 	std::string file = "shape.bmp";
 	if (argc == 2) {
 		file = argv[1];
 	}
+
 	Bmp_Reader bmp(file);
 	Grid first_grid = bmp.get_grid(conductor,Emax,Emin,10.);
 	cout << "Shape parsed." << endl;
-
-	//first_grid.set_flow_careful(Emax, Emin);
-
 
 	Fast_Finite_Difference fd (first_grid);
 	fd.set_precision(0.00001);
 	fd.set_maxit(10000);
 	cout << "Solving..." << endl;
-	//timespec t0, t1;
-	//clock_gettime(CLOCK_REALTIME, &t0);
     Grid sol = fd.get_solution();
-    //clock_gettime(CLOCK_REALTIME, &t1);
-    //cout << difftime(t1.tv_sec,t0.tv_sec) << endl;
     cout << "Done solving!" << endl;
 
     cout << "Plotting..." << endl;
@@ -56,8 +47,6 @@ int main(int argc,char * argv[]) {
 	gp.add_plot();
 	//, 'figure.dat' with lines ls -1"); // white = ls -3; black = ls -1; red = ls 1; green = 2; blue = ls 3; violet = ls 4;
 	gp.sendString();
-	remove("results.dat");
-	remove("eq_lines.dat");
 
     cout << "Done plotting!" << endl;
 

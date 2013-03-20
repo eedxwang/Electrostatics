@@ -578,7 +578,7 @@ void Grid::equip_values(int n, int line_width,
 	}
 
 // This part of the code outputs the values for each point depending on value of "menu" set by user
-
+/*
 	if (menu == 1) {
 
 		for (int xs = 0; xs < values.size(); xs++) {
@@ -666,6 +666,7 @@ void Grid::equip_values(int n, int line_width,
 		}
 
 	}
+	*/
 }
 
 // small function used equip_values(...);
@@ -1928,6 +1929,23 @@ void Grid::print_points() {
 }
 
 // prints out the points for eq.p lines. n - the number of eq.pot. lines
+
+void Grid::set_equipotential_lines(int n, int a, int b) {
+    equip_values(n,a,b);
+    double low_val = get_lowest_value();
+    for (int i=1; i <= n; ++i) {
+        for (int y = 0; y < values[0].size(); y++) {
+            for (int x = 0; x < values.size(); x++) {
+                if ( values[x][y].flag == i ) {
+                    if (x==0 || x==values.size()-1 || y==0 || y == values[0].size()-1 ) {values[x][y].value = low_val;}
+                    else if (values[x][y].boundary == false) {
+                        values[x][y].value = low_val;
+                    }
+                }
+            }
+        }
+    }
+}
 
 void Grid::print_contours_to(string filename) {
     int n = number_of_lines;
