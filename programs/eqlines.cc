@@ -33,7 +33,7 @@ int main() {
 
 	Gnuplot gp(sol);
 	sol.equip_values(N,1,1);
-	sol.print_contours_to("eq_lines.dat", N);
+	sol.print_contours_to("eq_lines.dat");
 
 
 	gp.add_command("set term postscript");

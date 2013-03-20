@@ -13,6 +13,7 @@ Grid::Grid() :
 }
 
 Grid::Grid(unsigned int x, unsigned int y) {
+    number_of_lines = 0;
 	unsigned int ix = x + 1;
 	unsigned int iy = y + 1;
 	vector<Value> dummy_vec_val;
@@ -343,6 +344,7 @@ void Grid::equip_values(int n, int xmax, int ymax, double Emax, int line_width, 
 
 void Grid::equip_values(int n, int line_width,
 		int menu) {
+    number_of_lines = n;
     int xmax = values.size() - 1;
     int ymax = values[0].size() - 1;
     double Emax = get_highest_value();
@@ -1927,7 +1929,8 @@ void Grid::print_points() {
 
 // prints out the points for eq.p lines. n - the number of eq.pot. lines
 
-void Grid::print_contours_to(string filename, int n) {
+void Grid::print_contours_to(string filename) {
+    int n = number_of_lines;
 	ofstream outdata;
 	outdata.open(filename.c_str());
 	if (outdata.is_open()) {

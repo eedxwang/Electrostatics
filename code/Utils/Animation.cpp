@@ -101,7 +101,7 @@ void Animation::create_data() {
 	bbb << "eq_lines"<< iii << ".dat";
 	string str2 = bbb.str();
 	sol2.equip_values(lines.number_of_lines,1,1);
-	sol2.print_contours_to(str2, lines.number_of_lines);
+	sol2.print_contours_to(str2);
 	}
 	}
 
