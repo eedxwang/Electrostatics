@@ -57,6 +57,8 @@ int main() {
 	gp.add_command("plot 'results.dat' with image, 'eq_lines.dat' with lines ls -1");
 	//, 'figure.dat' with lines ls -1"); // white = ls -3; black = ls -1; red = ls 1; green = 2; blue = ls 3; violet = ls 4;
 	gp.sendString();
+	remove("results.dat");
+	remove("eq_lines.dat");
 
     cout << "Done plotting!" << endl;
 
