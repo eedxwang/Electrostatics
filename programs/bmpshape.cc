@@ -42,8 +42,9 @@ int main() {
     sol.set_figure_outline();
 	sol.print_all_to("results.dat");
 
+
 	Gnuplot gp(sol);
-	sol.equip_values(N,n,m,Emax,1,1);
+	sol.equip_values(N,1,1);
 	sol.print_contours_to("eq_lines.dat", N);
 
 	gp.add_command("set term postscript");
