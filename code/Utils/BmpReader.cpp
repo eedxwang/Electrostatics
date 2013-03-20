@@ -22,11 +22,15 @@ Bmp_Reader::Bmp_Reader(std::string filename) {
         		else if(ih.biBitCount==32) {
         			fread( &(*i),4, 1, file );
         		}
-        		if (i==h+(ih.biWidth-1)*ih.biHeight) break;//Oh god I feel dirty
+        		if (i==h+(ih.biHeight-1)*ih.biWidth) break;//Oh god I feel dirty
         	}
         	fread(&dump,pad,1,file);
         }
         fclose(file);
+    }
+    else {
+    	std::cout << "Error opening bitmap" << std::endl;
+    	exit(EXIT_FAILURE);
     }
 }
 
@@ -47,9 +51,9 @@ Grid Bmp_Reader::get_grid(Boundary b,double l,double r, double vals) {
 	if (b==conductor){ boundaryVal.flag = 1; }
 	else {boundaryVal.flag = 0;}
 	std::vector<Value> row;
-	for (RGBQUAD * h = pixels;h!=pixels+ih.biWidth*ih.biHeight;h+=(ih.biWidth)) {
+	for (RGBQUAD * h = pixels;h!=pixels+ih.biWidth*ih.biHeight;h+=(ih.biHeight)) {
 		row.clear();
-		for (RGBQUAD * i = h; i!=h+(ih.biWidth);++i) {
+		for (RGBQUAD * i = h; i!=h+(ih.biHeight);++i) {
 			if ( (ih.biBitCount>8 && ((*i).rgbBlue < 0xee || (*i).rgbGreen < 0xee || (*i).rgbBlue < 0xee || (ih.biBitCount==32 && (*i).rgbReserved < 0xee)))
 					|| (ih.biBitCount==8 && (*i).rgbReserved < 0xee) ) {
 				row.push_back(boundaryVal);
