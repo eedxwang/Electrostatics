@@ -35,7 +35,7 @@ void Fast_Finite_Difference::solve(){
 			}
 		}
 	}
-		grid.set_values(one);
+	grid.set_values(one);
 }
 Grid Fast_Finite_Difference::get_solution() {
 	Fast_Finite_Difference::solve();

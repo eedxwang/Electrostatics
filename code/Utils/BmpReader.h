@@ -91,7 +91,6 @@ public:
 	 * @function					Constructor
 	 * @brief						Creates a bmp object from a requested bmp file
 	 * @param						std::string : filename
-	 * @param						enum : boundary
 	 * @return						None
 	 */
 	Bmp_Reader(std::string filename);
